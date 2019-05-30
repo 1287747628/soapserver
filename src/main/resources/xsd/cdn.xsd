@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="iptv" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="iptv">
+
+    <element name="ContentDispMngReq" type="tns:ContentDispMngReq"></element>
+
+    <complexType name="ContentDispMngReq">
+        <sequence>
+            <element name="COPID" type="string"></element>
+            <element name="SOPID" type="string"></element>
+            <element name="CorrelateID" type="string"></element>
+            <element name="ContentMngXMLURL" type="string"></element>
+        </sequence>
+    </complexType>
+
+    <element name="ContentDispMngResponse" type="tns:ContentDispMngResponse"></element>
+
+    <complexType name="ContentDispMngResponse">
+        <sequence>
+            <element name="Result" type="int"></element>
+            <element name="ErrorDescription" type="string"></element>
+        </sequence>
+    </complexType>
+</schema>
