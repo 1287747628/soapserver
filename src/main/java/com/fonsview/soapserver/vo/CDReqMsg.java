@@ -5,28 +5,25 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "ContentDispMngReq", namespace = "iptv")
+@XmlRootElement(name = "ContentDeployReq", namespace = "iptv")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class EpgCeRequestMsg {
+public class CDReqMsg {
 
     @XmlElement
-    private String COPID;
-
+    private String CMSID;
     @XmlElement
     private String SOPID;
-
     @XmlElement
     private String CorrelateID;
-
     @XmlElement
     private String ContentMngXMLURL;
 
-    public String getCOPID() {
-        return COPID;
+    public String getCMSID() {
+        return CMSID;
     }
 
-    public void setCOPID(String COPID) {
-        this.COPID = COPID;
+    public void setCMSID(String CMSID) {
+        this.CMSID = CMSID;
     }
 
     public String getSOPID() {

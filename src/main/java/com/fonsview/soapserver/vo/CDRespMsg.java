@@ -5,21 +5,21 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "ExecCmdResponse", namespace = "iptv")
+@XmlRootElement(name = "ContentDeployReqResponse", namespace = "iptv")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CdnRespMsg {
+public class CDRespMsg {
 
     @XmlElement
-    private int Result;
+    private int ResultCode;
     @XmlElement
     private String ErrorDescription;
 
-    public int getResult() {
-        return Result;
+    public int getResultCode() {
+        return ResultCode;
     }
 
-    public void setResult(int result) {
-        Result = result;
+    public void setResultCode(int resultCode) {
+        ResultCode = resultCode;
     }
 
     public String getErrorDescription() {

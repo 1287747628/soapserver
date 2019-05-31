@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="ContentDispMngResponse",namespace="iptv")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class EpgCeResponseMsg {
+public class CERespMsg {
 
     @XmlElement
     private int Result;

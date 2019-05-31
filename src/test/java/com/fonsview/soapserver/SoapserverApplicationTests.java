@@ -17,15 +17,7 @@ public class SoapserverApplicationTests {
 
     @Test
     public void contextLoads() throws Exception{
-        ReplyTask task = new ReplyTask();
-        task.setReplyType(ReplyTask.DIST_CDN);
-        task.setCspID("mango");
-        task.setLspID("mango");
-        task.setCorrelateID("123456");
-        task.setCmdResult("0");
-        task.setResultFileURL("ftp://");
-        replyNotifyService.addReplyTask(task);
-        Thread.sleep(20000);
+
     }
 
 }

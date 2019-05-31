@@ -1,1 +1,1 @@
-nohup java -jar soapserver-0.0.1-SNAPSHOT.jar >soap.log 2>soap_error.log &
+nohup java -jar soapserver-0.0.1-SNAPSHOT.jar >soapServer.log &
