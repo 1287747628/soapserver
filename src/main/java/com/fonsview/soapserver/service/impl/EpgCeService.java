@@ -1,5 +1,7 @@
 package com.fonsview.soapserver.service.impl;
 
+import com.fonsview.soapserver.constants.ProKey;
+import com.fonsview.soapserver.service.ProConfigService;
 import com.fonsview.soapserver.service.ReplyNotifyService;
 import com.fonsview.soapserver.vo.CEReplyMsg;
 import com.fonsview.soapserver.vo.CEReqMsg;
@@ -17,6 +19,8 @@ public class EpgCeService {
 
     @Resource
     private ReplyNotifyService replyNotifyService;
+    @Resource
+    private ProConfigService proConfigService;
 
     @PayloadRoot(namespace = "iptv", localPart = "ContentDispMngReq")
     @ResponsePayload
@@ -29,7 +33,8 @@ public class EpgCeService {
 
         ReplyTask replyTask = new ReplyTask();
         replyTask.setReplyType(ReplyTask.DIST_CE);
-        replyTask.setReplyUrl("http://172.16.16.25:8080/cms/ws/EpgCeResult");
+        String replyUrl = proConfigService.getString(ProKey.CE_REPLY_URL, "http://172.16.16.25:8080/cms/ws/EpgCeResult");
+        replyTask.setReplyUrl(replyUrl);
         replyTask.setReplyMsg(new CEReplyMsg());
 
         CEReplyMsg replyMsg = (CEReplyMsg) replyTask.getReplyMsg();

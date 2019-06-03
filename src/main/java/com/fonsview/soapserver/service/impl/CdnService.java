@@ -1,5 +1,6 @@
 package com.fonsview.soapserver.service.impl;
 
+import com.fonsview.soapserver.constants.ProKey;
 import com.fonsview.soapserver.service.ReplyNotifyService;
 import com.fonsview.soapserver.vo.CDReplyMsg;
 import com.fonsview.soapserver.vo.CDReqMsg;
@@ -17,6 +18,8 @@ public class CdnService {
 
     @Resource
     private ReplyNotifyService replyNotifyService;
+    @Resource
+    private ProConfigServiceImpl proConfigService;
 
     @PayloadRoot(namespace = "iptv", localPart = "ContentDeployReq")
     @ResponsePayload
@@ -29,7 +32,8 @@ public class CdnService {
 
         ReplyTask replyTask = new ReplyTask();
         replyTask.setReplyType(ReplyTask.DIST_CD);
-        replyTask.setReplyUrl("http://172.16.16.25:8080/cms/ws/ContentDeployResult");
+        String replyUrl = proConfigService.getString(ProKey.CD_REPLY_URL, "http://172.16.16.25:8080/cms/ws/ContentDeployResult");
+        replyTask.setReplyUrl(replyUrl);
         replyTask.setReplyMsg(new CDReplyMsg());
 
         CDReplyMsg replyMsg = (CDReplyMsg) replyTask.getReplyMsg();
