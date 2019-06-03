@@ -22,15 +22,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Service
 public class ReplyNotifyServiceImpl implements ReplyNotifyService {
 
+    private ExecutorService fixedThreadPool;
     private LinkedBlockingQueue<ReplyTask> taskQueue;
 
     @PostConstruct
     private void init() {
+        fixedThreadPool = Executors.newFixedThreadPool(10);
         ReplyTaskThread taskThread = new ReplyTaskThread();
         taskThread.start();
     }
@@ -47,8 +51,7 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
             while (true) {
                 try {
                     ReplyTask task = taskQueue.take();
-                    TaskHandleThread taskHandle = new TaskHandleThread(task);
-                    taskHandle.start();
+                    fixedThreadPool.submit(new TaskHandleThread(task));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -56,7 +59,7 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
         }
     }
 
-    private class TaskHandleThread extends Thread {
+    private class TaskHandleThread implements Runnable {
         private ReplyTask task;
 
         TaskHandleThread(ReplyTask task) {
@@ -67,7 +70,7 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
         @Override
         public void run() {
             try {
-                Thread.sleep(new Random().nextInt(3) + 1);
+                Thread.sleep((new Random().nextInt(3) + 1) * 1000);
                 if (ReplyTask.DIST_MIGU.equals(task.getReplyType())) {
                     miguReply(task);
                 } else if (ReplyTask.DIST_CE.equals(task.getReplyType())) {
@@ -283,6 +286,12 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
             }
         });
         return url;
+    }
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            System.out.println((new Random().nextInt(3) + 1) * 1000);
+        }
     }
 
 }
