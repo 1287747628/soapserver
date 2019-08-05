@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <property name="log.root.level" value="INFO"/> <!-- 日志级别 -->
+    <property name="log.debug.level" value="DEBUG"/> <!-- 其他日志级别 -->
+
+    <!--控制台输出 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread] %logger{32}.%method:%L - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- hibernate logger -->
+    <logger name="org.hibernate" level="WARN" additivity="true"></logger>
+    <!-- Spring framework logger -->
+    <logger name="org.springframework" level="WARN" additivity="true"></logger>
+    <logger name="org.apache.commons.httpclient" level="WARN" additivity="true"></logger>
+
+    <!-- root将级别为${log.root.level}及大于${log.root.level}的日志信息交给已经配置好的名为“Console”的appender处理，“Console”appender将信息打印到Console,其它同理 -->
+    <root level="${log.root.level}">
+        <appender-ref ref="stdout"/> <!--  标识这个appender将会添加到这个logger -->
+    </root>
+
+</configuration>

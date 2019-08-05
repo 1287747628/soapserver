@@ -3,6 +3,8 @@ package com.fonsview.soapserver.service.impl;
 import com.fonsview.soapserver.service.ReplyNotifyService;
 import com.fonsview.soapserver.vo.FieldAlias;
 import com.fonsview.soapserver.vo.ReplyTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
@@ -28,6 +30,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @Service
 public class ReplyNotifyServiceImpl implements ReplyNotifyService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReplyNotifyServiceImpl.class);
 
     private ExecutorService fixedThreadPool;
     private LinkedBlockingQueue<ReplyTask> taskQueue;
@@ -127,14 +131,14 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
             res.setOutputStream(myOutStr);
             transformer.transform(source, res);
             String result = myOutStr.toString("UTF-8");
-            System.out.println(">>>migu result:" + result);
+            logger.info(">>>migu result:" + result);
 
             Document doc = reply.getSOAPPart().getEnvelope().getBody().extractContentAsDocument();
             String resultCode = doc.getElementsByTagName("result").item(0).getTextContent();
             if ("0".equals(resultCode)) {
-                System.out.println(">>>migu task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
+                logger.info(">>>migu task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
             } else {
-                System.out.println(">>>migu task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
+                logger.error(">>>migu task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,14 +194,14 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
             res.setOutputStream(myOutStr);
             transformer.transform(source, res);
             String result = myOutStr.toString("UTF-8");
-            System.out.println(">>>ce result:" + result);
+            logger.info(">>>ce result:" + result);
 
             Document doc = reply.getSOAPPart().getEnvelope().getBody().extractContentAsDocument();
             String resultCode = doc.getElementsByTagName("Result").item(0).getTextContent();
             if ("0".equals(resultCode)) {
-                System.out.println(">>>ce task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
+                logger.info(">>>ce task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
             } else {
-                System.out.println(">>>ce task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
+                logger.error(">>>ce task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,14 +257,14 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
             res.setOutputStream(myOutStr);
             transformer.transform(source, res);
             String result = myOutStr.toString("UTF-8");
-            System.out.println(">>>cd result:" + result);
+            logger.info(">>>cd result:" + result);
 
             Document doc = reply.getSOAPPart().getEnvelope().getBody().extractContentAsDocument();
             String resultCode = doc.getElementsByTagName("ResultCode").item(0).getTextContent();
             if ("0".equals(resultCode)) {
-                System.out.println(">>>cd task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
+                logger.info(">>>cd task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
             } else {
-                System.out.println(">>>cd task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
+                logger.error(">>>cd task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -316,14 +320,14 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
             res.setOutputStream(myOutStr);
             transformer.transform(source, res);
             String result = myOutStr.toString("UTF-8");
-            System.out.println(">>>cms result:" + result);
+            logger.info(">>>cms result:" + result);
 
             Document doc = reply.getSOAPPart().getEnvelope().getBody().extractContentAsDocument();
             String resultCode = doc.getElementsByTagName("result").item(0).getTextContent();
             if ("0".equals(resultCode)) {
-                System.out.println(">>>cms task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
+                logger.info(">>>cms task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
             } else {
-                System.out.println(">>>cms task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
+                logger.error(">>>cms task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
             }
         } catch (Exception e) {
             e.printStackTrace();

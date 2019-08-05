@@ -6,6 +6,8 @@ import com.fonsview.soapserver.vo.CMSReplyMsg;
 import com.fonsview.soapserver.vo.CMSReqMsg;
 import com.fonsview.soapserver.vo.CMSRespMsg;
 import com.fonsview.soapserver.vo.ReplyTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -16,6 +18,8 @@ import javax.annotation.Resource;
 @Endpoint
 public class CmsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CmsService.class);
+
     @Resource
     private ReplyNotifyService replyNotifyService;
     @Resource
@@ -24,7 +28,7 @@ public class CmsService {
     @PayloadRoot(namespace = "iptv", localPart = "ExecCmd")
     @ResponsePayload
     public CMSRespMsg ExecCmd(@RequestPayload CMSReqMsg req) {
-        System.out.println("CMS receive >> CSPID:" + req.getCSPID() + ", LSPID:" + req.getLSPID() + ", CorrelateID:" + req.getCorrelateID() + ", CmdFileURL:" + req.getCmdFileURL());
+        logger.info("CMS receive >> CSPID:" + req.getCSPID() + ", LSPID:" + req.getLSPID() + ", CorrelateID:" + req.getCorrelateID() + ", CmdFileURL:" + req.getCmdFileURL());
 
         CMSRespMsg resp = new CMSRespMsg();
         resp.setResult(0);
