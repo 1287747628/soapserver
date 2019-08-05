@@ -54,4 +54,19 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new SimpleXsdSchema(new ClassPathResource("xsd/cdn.xsd"));
     }
 
+    @Bean(name = "cmsReceive")
+    public DefaultWsdl11Definition defaultWsdl11DefinitionCms(XsdSchema cmsSchema) {
+        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
+        wsdl11Definition.setPortTypeName("cmsReceivePort");
+        wsdl11Definition.setLocationUri("/cmsReceive");
+        wsdl11Definition.setTargetNamespace("iptv");
+        wsdl11Definition.setSchema(cmsSchema);
+        return wsdl11Definition;
+    }
+
+    @Bean
+    public XsdSchema cmsSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("xsd/cms.xsd"));
+    }
+
 }

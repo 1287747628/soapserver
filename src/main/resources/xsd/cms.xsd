@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="iptv" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="iptv">
+
+    <element name="ExecCmd" type="tns:ExecCmd"></element>
+
+    <complexType name="ExecCmd">
+        <sequence>
+            <element name="CSPID" type="string"></element>
+            <element name="CorrelateID" type="string"></element>
+            <element name="LSPID" type="string"></element>
+            <element name="CmdFileURL" type="string"></element>
+        </sequence>
+    </complexType>
+
+    <element name="Result" type="tns:Result"></element>
+
+    <complexType name="Result">
+        <sequence>
+            <element name="ResultCode" type="int"></element>
+            <element name="ErrorDescription" type="string"></element>
+        </sequence>
+    </complexType>
+</schema>

@@ -5,6 +5,7 @@ public class ReplyTask {
     public static final String DIST_MIGU = "DIST_MIGU";
     public static final String DIST_CE = "DIST_CE";
     public static final String DIST_CD = "DIST_CD";
+    public static final String DIST_CMS = "DIST_CMS";
     //
     private String replyType;
     private String replyUrl;

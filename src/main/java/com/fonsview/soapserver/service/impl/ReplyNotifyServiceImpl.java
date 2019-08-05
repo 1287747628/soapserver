@@ -77,6 +77,8 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
                     ceReply(task);
                 } else if (ReplyTask.DIST_CD.equals(task.getReplyType())) {
                     cdReply(task);
+                } else if (ReplyTask.DIST_CMS.equals(task.getReplyType())) {
+                    cmsReply(task);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -273,6 +275,70 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
         }
     }
 
+    private void cmsReply(ReplyTask replyTask) {
+        SOAPConnection connection = null;
+        try {
+            // 创建连接
+            connection = SOAPConnectionFactory.newInstance().createConnection();
+            // 创建消息对象
+            SOAPMessage message = MessageFactory.newInstance().createMessage();
+            message.setProperty(SOAPMessage.CHARACTER_SET_ENCODING, "UTF-8");
+            MimeHeaders headers = message.getMimeHeaders();
+            headers.addHeader("SOAPAction", "");
+            // 创建soap消息主体
+            SOAPPart soapPart = message.getSOAPPart();
+            SOAPEnvelope envelope = soapPart.getEnvelope();
+            SOAPBody body = envelope.getBody();
+            SOAPElement bodyElement = body.addChildElement(envelope.createName("ResultNotify", "iptv", "iptv"));
+
+            for (Class<?> cls = replyTask.getReplyMsg().getClass(); cls != Object.class; cls = cls.getSuperclass()) {
+                Field[] fields = cls.getDeclaredFields();
+                for (Field field : fields) {
+                    if (field.isAnnotationPresent(FieldAlias.class)) {
+                        PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), cls);
+                        Method m = descriptor.getReadMethod();
+                        Object oValue = m.invoke(replyTask.getReplyMsg());
+                        bodyElement.addChildElement(field.getName()).addTextNode(String.valueOf(oValue == null ? "" : oValue));
+                    }
+                }
+            }
+
+            // Save the message
+            message.saveChanges();
+            // 创建服务地址
+            URL url = getUrl(replyTask.getReplyUrl());
+            // 响应消息
+            SOAPMessage reply = connection.call(message, url);
+            Source source = reply.getSOAPPart().getContent();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            ByteArrayOutputStream myOutStr = new ByteArrayOutputStream();
+            StreamResult res = new StreamResult();
+            res.setOutputStream(myOutStr);
+            transformer.transform(source, res);
+            String result = myOutStr.toString("UTF-8");
+            System.out.println(">>>cms result:" + result);
+
+            Document doc = reply.getSOAPPart().getEnvelope().getBody().extractContentAsDocument();
+            String resultCode = doc.getElementsByTagName("result").item(0).getTextContent();
+            if ("0".equals(resultCode)) {
+                System.out.println(">>>cms task:" + replyTask.getReplyMsg().getCorrelateID() + " reply success.");
+            } else {
+                System.out.println(">>>cms task:" + replyTask.getReplyMsg().getCorrelateID() + " reply fail.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
     private URL getUrl(String sendMsg2CSPURL) throws MalformedURLException {
         URL url = new URL(new URL(sendMsg2CSPURL), "", new URLStreamHandler() {
             @Override
@@ -280,8 +346,8 @@ public class ReplyNotifyServiceImpl implements ReplyNotifyService {
                 URL target = new URL(url.toString());
                 URLConnection connection = target.openConnection();
                 // Connection settings
-                connection.setConnectTimeout(10000); // 10 sec
-                connection.setReadTimeout(10000); // 10 sec
+                connection.setConnectTimeout(10000);
+                connection.setReadTimeout(10000);
                 return (connection);
             }
         });
